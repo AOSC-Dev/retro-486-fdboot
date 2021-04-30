@@ -33,4 +33,4 @@ date +"%FT%T%z"
 . /etc/profile
 
 echo -e "${FYELLOW}Launching Shell${RESET}"
-exec cttyhack hush
+exec init

@@ -1,0 +1,8 @@
+::sysinit:/etc/init.d/rcS
+tty1::askfirst:-/bin/ash
+tty2::askfirst:-/bin/ash
+tty3::askfirst:-/bin/ash
+tty4::askfirst:-/bin/ash
+tty5::askfirst:-/bin/ash
+::restart:/bin/init
+::ctrlaltdel:/bin/reboot
