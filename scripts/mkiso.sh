@@ -2,6 +2,7 @@
 set -ex
 
 rsync --del -avr cd work
+rsync --del -avr bin/tarball work/cd
 cp -v bin/busybox work/cd
 rsync -avr --del linux/tar-install/lib/modules work/cd/lib
 (
