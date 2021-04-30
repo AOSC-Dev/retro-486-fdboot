@@ -8,7 +8,7 @@
 
 # Important Environment Variable
 export PATH="/bin"
-
+/busybox --install -s /bin
 msg_echo "Mounting /proc /sys /dev"
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
