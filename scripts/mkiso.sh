@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 rsync -avr cd work
 cp -v bin/busybox work/cd
