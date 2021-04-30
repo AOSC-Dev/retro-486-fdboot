@@ -40,7 +40,9 @@ err_echo()
 	echo -e "${BRIGHT}${BRED}>>${RESET} ${BRIGHT}${FRED}${*}${RESET}"
 }
 
-echo_file()
+# Sub-message
+
+sub_echo()
 {
 	echo -e "\t${BRIGHT}>> ${1}${RESET}"
 }
@@ -70,13 +72,14 @@ PATH="/bin"
 msg_echo "Finding Installation CD"
 if dev=`findfs LABEL=AOSC_INSTCD` ; then
 	if mount $dev /cd ; then
-		echo_file "Found & Mounted CD, switch_root into it."
+		sub_echo "Found & Mounted CD, switch_root into it."
 		ln -s /cd/lib /lib
 		/cd/busybox modprobe overlay &&
-			echo_file "Loaded overlayfs module"
+			sub_echo "Loaded overlayfs module"
 
 		mkdir /tmp/work /tmp/updir
 		mount -t overlay -o lowerdir=/cd,upperdir=/tmp/updir,workdir=/tmp/work overlay /new_root &&
+		sub_echo "Switching Root!! There's no way to return from now on."
 		exec switch_root /new_root /init
 	fi
 fi

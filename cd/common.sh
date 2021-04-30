@@ -67,7 +67,7 @@ root_dev_id()
 	fi
 }
 
-echo_file()
+sub_echo()
 {
 	echo -e "\t${BRIGHT}>> ${1}${RESET}"
 }

@@ -22,7 +22,7 @@ if [ -d /script ]; then
 	msg_echo "Running additional scripts"
 	for i in /script/* ; do
 		if [ -x "$i" ]; then
-			echo_file "$i" postboot
+			sub_echo "$i"
 			"$i"
 		fi
 	done
@@ -32,5 +32,5 @@ fi
 date +"%FT%T%z"
 . /etc/profile
 
-echo -e "${FYELLOW}Launching Shell${RESET}"
+echo -e "${FYELLOW}Launching init${RESET}"
 exec init
