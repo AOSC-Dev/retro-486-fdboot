@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -ex
 
-rsync -avr cd work
+rsync --del -avr cd work
 cp -v bin/busybox work/cd
 rsync -avr --del linux/tar-install/lib/modules work/cd/lib
 (
