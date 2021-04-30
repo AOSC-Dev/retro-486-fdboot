@@ -1,0 +1,36 @@
+#!/busybox hush
+
+####################################################
+# ===== Neo_Chen's Simple Init Script System ===== #
+####################################################
+
+. /common.sh
+
+# Important Environment Variable
+export PATH="/bin"
+
+msg_echo "Mounting /proc /sys /dev"
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t devtmpfs devtmpfs /dev
+msg_echo "Mounting /tmp"
+mount -t tmpfs tmpfs /tmp
+msg_echo "Triggering mdev"
+mdev -s
+
+if [ -d /script ]; then
+	msg_echo "Running additional scripts"
+	for i in /script/* ; do
+		if [ -x "$i" ]; then
+			echo_file "$i" postboot
+			"$i"
+		fi
+	done
+fi
+
+# Just for eye-candy
+date +"%FT%T%z"
+. /etc/profile
+
+echo -e "${FYELLOW}Launching Shell${RESET}"
+exec cttyhack hush

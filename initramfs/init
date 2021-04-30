@@ -1,0 +1,122 @@
+#!/busybox hush
+	################################################
+	# ===== Neo_Chen's Mining Cluster System ===== #
+	################################################
+
+## Colors
+ESC="\e"
+RESET="${ESC}[0m"	#Reset all attributes
+BRIGHT="${ESC}[1m"	#Bright
+DIM="${ESC}[2m"	#Dim
+BLINK="${ESC}[5m"	#Blink
+#Foreground Colours
+FBLACK="${ESC}[30m"	#Black
+FRED="${ESC}[31m"	#Red
+FGREEN="${ESC}[32m"	#Green
+FYELLOW="${ESC}[33m"	#Yellow
+FBLUE="${ESC}[34m"	#Blue
+FMAGENTA="${ESC}[35m"	#Magenta
+FCYAN="${ESC}[36m"	#Cyan
+FWHITE="${ESC}[37m"	#White
+#Background Colours
+BBLACK="${ESC}[40m"	#Black
+BRED="${ESC}[41m"	#Red
+BGREEN="${ESC}[42m"	#Green
+BYELLOW="${ESC}[43m"	#Yellow
+BBLUE="${ESC}[44m"	#Blue
+BMAGENTA="${ESC}[45m"	#Magenta
+BCYAN="${ESC}[46m"	#Cyan
+BWHITE="${ESC}[47m"	#White
+
+# Normal Message
+msg_echo()
+{
+	echo -e "${BBLUE}>>${RESET} ${BRIGHT}${FYELLOW}${*}${RESET}"
+}
+
+# Error Message
+err_echo()
+{
+	echo -e "${BRIGHT}${BRED}>>${RESET} ${BRIGHT}${FRED}${*}${RESET}"
+}
+
+## Define Functions
+cmdline()
+{
+	local value
+	value=" $(cat /proc/cmdline) "
+	value="${value##* $1=}"
+	value="${value%% *}"
+	[ "$value" != "" ] && echo "$value"
+}
+
+present()
+{
+	local option
+	option="$1"
+
+	grep "\b${option}\b" /proc/cmdline 2>&1 > /dev/null
+	return "$?"
+}
+
+root_dev_id()
+{
+	if grep "\broot=LABEL=\|root=UUID=\|root=PARTUUID=\|root=PARTLABEL=" /proc/cmdline ; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+echo_file()
+{
+	echo -e "\t${BRIGHT}>> ${1}${RESET}"
+}
+
+# Important Environment Variable
+export PATH="/bin"
+
+echo -e "${FCYAN}Making /bin${RESET}"
+mkdir -p /bin /etc /etc/udev /sys /proc /etc/init.d /mnt /bin/busybox /tmp
+echo -e "${FCYAN}Installing Binaries${RESET}"
+/busybox --install -s /bin
+
+touch /etc/mtab
+msg_echo "Mounting /proc /sys /dev"
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t devtmpfs devtmpfs /dev
+msg_echo "Triggering mdev"
+ln -sf /proc/mtab /etc/mtab
+mdev -s
+
+# File Extraction
+msg_echo "Extracting Files"
+
+## /etc/profile
+echo_file "/etc/profile"
+{
+cat <<EOF
+export PATH="/bin"
+export PS1="\[\e[33;1m\][\u@\H]\[\e[0m\] \[\e[35;1m\](\w)\[\e[0m\] \[\e[44;1m\]>>\$\[\e[0m\] "
+EOF
+} > /etc/profile
+
+PATH="/bin"
+
+msg_echo "Finding Installation CD"
+if dev=`findfs LABEL=AOSC_INSTCD` ; then
+	mkdir /cd
+	if mount $dev /cd ; then
+		echo_file "Found & Mounted CD, switch_root into it."
+		exec switch_root /cd /init
+	else
+		err_echo "Unable to mount the installation CD, launching shell."
+	fi
+fi
+
+# Just for eye-candy
+date +"%FT%T%z"
+. /etc/profile
+
+exec cttyhack hush
