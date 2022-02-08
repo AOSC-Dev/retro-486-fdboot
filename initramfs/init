@@ -1,4 +1,4 @@
-#!/busybox ash
+#!/busybox sh
 ###################################################
 # ===== Neo_Chen's 486 Bootable Floppy Disk ===== #
 ###################################################
@@ -55,7 +55,6 @@ echo -e "${FCYAN}Making /bin${RESET}"
 echo -e "${FCYAN}Installing Binaries${RESET}"
 /busybox --install -s /bin
 
-touch /etc/mtab
 msg_echo "Mounting /proc /sys /dev /tmp"
 mount -t proc proc /proc
 mount -t sysfs sys /sys
@@ -70,8 +69,7 @@ touch /etc/fstab
 PATH="/bin"
 
 msg_echo "Finding Installation CD"
-if dev=`findfs LABEL=AOSC_INSTCD` ; then
-	if mount $dev /cd ; then
+if mount LABEL=AOSC_INSTCD /cd ; then
 		sub_echo "Found & Mounted CD, switch_root into it."
 		ln -s /cd/lib /lib
 		/cd/busybox modprobe overlay &&
@@ -81,7 +79,6 @@ if dev=`findfs LABEL=AOSC_INSTCD` ; then
 		mount -t overlay -o lowerdir=/cd,upperdir=/tmp/updir,workdir=/tmp/work overlay /new_root &&
 		sub_echo "Switching Root!! There's no way to return from now on."
 		exec switch_root /new_root /init
-	fi
 fi
 
 date +"%FT%T%z"
