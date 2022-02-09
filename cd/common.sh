@@ -39,34 +39,6 @@ err_echo()
 	echo -e "${BRIGHT}${BRED}>>${RESET} ${BRIGHT}${FRED}${*}${RESET}"
 }
 
-## Define Functions
-cmdline()
-{
-	local value
-	value=" $(cat /proc/cmdline) "
-	value="${value##* $1=}"
-	value="${value%% *}"
-	[ "$value" != "" ] && echo "$value"
-}
-
-present()
-{
-	local option
-	option="$1"
-
-	grep "\b${option}\b" /proc/cmdline 2>&1 > /dev/null
-	return "$?"
-}
-
-root_dev_id()
-{
-	if grep "\broot=LABEL=\|root=UUID=\|root=PARTUUID=\|root=PARTLABEL=" /proc/cmdline ; then
-		return 0
-	else
-		return 1
-	fi
-}
-
 sub_echo()
 {
 	echo -e "\t${BRIGHT}>> ${1}${RESET}"

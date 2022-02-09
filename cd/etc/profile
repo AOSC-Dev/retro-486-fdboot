@@ -1,0 +1,2 @@
+export PATH="/bin:/sbin"
+export PS1="\[\e[33;1m\][\u@\H]\[\e[0m\] \[\e[35;1m\](\w)\[\e[0m\] \[\e[44;1m\]>>\$\[\e[0m\] "

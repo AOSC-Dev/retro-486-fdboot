@@ -8,6 +8,14 @@
 
 # Important Environment Variable
 export PATH="/bin"
+# Print banner
+echo -e "${RESET}"
+echo -e "\t/+===================================+\\"
+echo -e "\t|| ${BRIGHT}Welcome to ${RESET}${FGREEN}AOSC${RESET}/${BRIGHT}${FRED}Retro${RESET}${FYELLOW} i486 FDBOOT${RESET} ||"
+echo -e "\t\+===================================+/"
+echo -e "${RESET}"
+
+msg_echo "Installing Binaries"
 /busybox --install -s /bin
 msg_echo "Mounting /proc /sys /dev"
 mount -t proc proc /proc
@@ -15,8 +23,14 @@ mount -t sysfs sysfs /sys
 mount -t devtmpfs devtmpfs /dev
 msg_echo "Mounting /tmp"
 mount -t tmpfs tmpfs /tmp
+
+echo "/bin/mdev" > /proc/sys/kernel/hotplug
 msg_echo "Triggering mdev"
 mdev -s
+
+msg_echo "Loading Kernel Modules"
+modprobe crc32c
+modprobe ext4
 
 if [ -d /script ]; then
 	msg_echo "Running additional scripts"
@@ -30,7 +44,6 @@ fi
 
 # Just for eye-candy
 date +"%FT%T%z"
-. /etc/profile
 
 echo -e "${FYELLOW}Launching init${RESET}"
 exec init
