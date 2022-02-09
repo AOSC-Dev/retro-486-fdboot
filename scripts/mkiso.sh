@@ -2,9 +2,10 @@
 set -ex
 
 rsync --del -avr cd work
-rsync --del -avr bin/tarball work/cd
+rsync -avr tarball work/cd
+rsync -avr utils-root/ work/cd
 cp -v bin/busybox work/cd
-rsync -avr --del linux/tar-install/lib/modules work/cd/lib
+rsync -avr --del bin/lib/ work/cd/lib
 (
 	cd work/cd
 	bsdtar -xpvvf skel.tar.gz
