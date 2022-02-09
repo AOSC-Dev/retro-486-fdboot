@@ -5,3 +5,6 @@ linux
 busybox
 busybox-mini
 tarball
+contrib
+toolchain
+utils-root

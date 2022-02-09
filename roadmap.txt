@@ -1,12 +1,9 @@
-Source Tree Structure:
-	linux		(Linux Kernel 5.4.y LTS)
-	linux/tar-install	(Generated with `make tarxz-pkg`)
-	busybox		(Busybox newest version)
-	busybox-mini	(same as above)
+External Sources:
+	linux			(Linux Kernel 5.10.y LTS)
+	busybox			(Busybox newest version)
+	busybox-mini		(same as above)
+	contrib/e2fsprogs
+	contrib/musl-cross-make
 
-There should be:
-	bin/busybox		(around 1.2MiB)
-	bin/busybox-mini	(around 260KiB)
-	bin/linux		(around 1.1MiB)
-	bin/modules/<Kernel Version>	(Kernel Modules)
-	bin/tarball/		(Tarballs to include into the CD-ROM)
+There should be those files/directories before building:
+	tarball/			(Tarball to be included into CD-ROM)
