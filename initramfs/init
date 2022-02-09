@@ -62,9 +62,8 @@ mount -t devtmpfs devtmpfs /dev
 mount -t tmpfs tmpfs /tmp
 msg_echo "Triggering mdev"
 ln -sf /proc/mtab /etc/mtab
-mdev -s
 
-touch /etc/fstab
+echo > /etc/fstab
 
 PATH="/bin"
 
@@ -73,15 +72,16 @@ if mount LABEL=AOSC_INSTCD /cd ; then
 		sub_echo "Found & Mounted CD, switch_root into it."
 		ln -s /cd/lib /lib
 		/cd/busybox modprobe overlay &&
-			sub_echo "Loaded overlayfs module"
+			sub_echo "Loaded overlayfs module" ||
+			err_echo "Loading of overlayfs module failed"
 
-		mkdir /tmp/work /tmp/updir
-		mount -t overlay -o lowerdir=/cd,upperdir=/tmp/updir,workdir=/tmp/work overlay /new_root &&
+		mkdir /ram
+		mount -t tmpfs tmpfs /ram
+		mkdir /ram/work /ram/updir
+		mount -t overlay -o lowerdir=/cd,upperdir=/ram/updir,workdir=/ram/work overlay /new_root
 		sub_echo "Switching Root!! There's no way to return from now on."
 		exec switch_root /new_root /init
 fi
 
-date +"%FT%T%z"
-
 err_echo "Unable to mount the installation CD, launching shell."
-exec cttyhack ash
+exec cttyhack sh
