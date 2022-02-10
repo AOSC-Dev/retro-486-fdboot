@@ -19,6 +19,7 @@ clean:
 	rm -f .x-*
 
 .x-sources:
+	./scripts/check.sh
 	./scripts/get-sources.sh
 	touch $@
 
@@ -31,7 +32,6 @@ bin/linux:	.x-sources
 
 .x-busybox:	.x-toolchain
 	./scripts/build-busybox.sh
-	./scripts/sync-bin.sh
 	touch $@
 
 .x-e2fsprogs: .x-toolchain

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 . scripts/common.sh
 
 [ -d "$OLDPWD" ] || mkdir -p "$OLDPWD/img"
