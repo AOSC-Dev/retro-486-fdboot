@@ -1,21 +1,52 @@
 # Stages:
 # 	* get sources
-# 	* copy config
 # 	* build kernel
 # 	* build musl toolchain
-# 	* build busybox
-# 	* build busybox-mini
+# 	* build busybox & busybox-mini
 # 	* build e2fsprogs
-# 	* clean-up
 # 	* mkinitramfs
 # 	* tarball decompress
 # 	* mkiso
 # 	* mkfd
 #
 
-.phony:	all
+.PHONY:	all clean
 
-all:	.x-done
+all: img/aosc.iso img/fd.img
 
-.x-done:
-	touch .x-done
+clean:
+	./clean.sh
+	rm -f .x-*
+
+.x-sources:
+	./scripts/get-sources.sh
+	touch $@
+
+bin/linux:	.x-sources
+	./scripts/build-kernel.sh
+
+.x-toolchain:	.x-sources
+	./scripts/build-toolchain.sh
+	touch $@
+
+.x-busybox:	.x-toolchain
+	./scripts/build-busybox.sh
+	./scripts/sync-bin.sh
+	touch $@
+
+.x-e2fsprogs: .x-toolchain
+	./scripts/build-e2fsprogs.sh
+	touch $@
+
+bin/initrd:	.x-busybox
+	./scripts/mkinitramfs.sh
+
+.x-tarball:
+	./scripts/tarball-prepare.sh
+	touch $@
+
+img/aosc.iso: .x-busybox .x-e2fsprogs .x-tarball bin/linux
+	./scripts/mkiso.sh
+
+img/fd.img: bin/linux bin/initrd
+	sudo ./scripts/mkfd.sh
