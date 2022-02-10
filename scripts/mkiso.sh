@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ex
+. scripts/common.sh
 
 rsync --del -avr cd work
 rsync -avr tarball work/cd

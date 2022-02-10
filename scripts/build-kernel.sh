@@ -1,10 +1,8 @@
 #!/bin/sh
-set -ex
-
+. scripts/common.sh
 rm -rf bin/lib
 
-OLDPWD="$PWD"
-
+cp -v config/linux.config linux/.config
 cd linux
 nice -n 20 make -j $(nproc)
 make INSTALL_MOD_PATH="$OLDPWD/bin" INSTALL_MOD_STRIP=1 modules_install

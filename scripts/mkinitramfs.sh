@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set +ex
+. scripts/common.sh
 
 mkdir -p work
 rsync --del -avr initramfs work/
