@@ -12,5 +12,8 @@ booting from CD-ROM.
 * optionally, PCMCIA CD-ROM
 
 ## TODO:
-* build script
 * a simple installer for installing AOSC/Retro tarball
+
+## Building:
+2. Run `make`
+3. Done
