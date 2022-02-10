@@ -1,6 +1,8 @@
 #!/bin/sh
 . scripts/common.sh
 
+mkdir -p bin
+
 for i in busybox busybox-mini; do
 	cp -v config/"$i".config "$i"/.config
 	(
