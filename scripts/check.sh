@@ -2,7 +2,7 @@
 
 declare -i COUNT=0
 
-for i in mkfs.vfat xz rsync mkisofs lilo
+for i in mkfs.vfat xz rsync mkisofs lilo bc
 do
 	if ! which "$i" > /dev/null; then
 		echo "Command ${i} not found!"
