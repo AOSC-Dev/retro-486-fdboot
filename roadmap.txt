@@ -1,9 +1,0 @@
-External Sources:
-	linux			(Linux Kernel 5.10.y LTS)
-	busybox			(Busybox newest version)
-	busybox-mini		(same as above)
-	contrib/e2fsprogs
-	contrib/musl-cross-make
-
-There should be those files/directories before building:
-	tarball/			(Tarball to be included into CD-ROM)
