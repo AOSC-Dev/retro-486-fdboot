@@ -8,3 +8,4 @@ tarball
 contrib
 toolchain
 utils-root
+.x*
