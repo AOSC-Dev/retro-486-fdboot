@@ -34,8 +34,8 @@ bin/linux:	.x-sources
 	./scripts/build-busybox.sh
 	touch $@
 
-.x-e2fsprogs: .x-toolchain
-	./scripts/build-e2fsprogs.sh
+.x-packages: .x-toolchain
+	./scripts/build-packages.sh
 	touch $@
 
 bin/initrd:	.x-busybox
@@ -45,7 +45,7 @@ bin/initrd:	.x-busybox
 	./scripts/tarball-prepare.sh
 	touch $@
 
-img/aosc.iso: .x-busybox .x-e2fsprogs .x-tarball bin/linux
+img/aosc.iso: .x-busybox .x-packages .x-tarball bin/linux
 	./scripts/mkiso.sh
 
 img/fd.img: bin/linux bin/initrd
