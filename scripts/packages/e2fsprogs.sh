@@ -2,7 +2,9 @@
 . scripts/common.sh
 
 DESTDIR="$PWD/bin/utils-root"
-cd contrib/e2fsprogs
+cd contrib
+[ -d e2fsprogs ] || c https://github.com/tytso/e2fsprogs.git
+cd e2fsprogs
 
 CFLAGS="-Os -march=i486" LDFLAGS="-Os -static" ./configure --host=i486-linux-musl --without-pthread --prefix=/
 make -j "$(nproc)"
